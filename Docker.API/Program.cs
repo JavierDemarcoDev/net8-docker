@@ -1,12 +1,13 @@
 using Context;
-using Docker.API.Endpoints;
+using Endpoints;
+using Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("Connection");
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString)
+    options.UseNpgsql(connectionString)
 );
 
 builder.Services.AddEndpointsApiExplorer();
@@ -18,6 +19,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection();
